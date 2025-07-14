@@ -1,1 +1,111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Обратный отсчет</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Кастомные стили для дополнительной стилизации */
+        body {
+            background-color: #0a0a0a;
+            background-image: 
+                radial-gradient(circle at center, #1a1a1a 0%, #0a0a0a 100%),
+                url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%"><filter id="noise"><feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="1" stitchTiles="stitch"/><feColorMatrix type="saturate" values="0"/></filter><rect width="100%" height="100%" filter="url(%23noise)" opacity="0.1"/></svg>');
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        /* Анимация для цифр таймера */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .timer-unit {
+            animation: fadeIn 0.5s ease-out;
+        }
+        
+        /* Стиль для разделителей */
+        .timer-separator {
+            opacity: 0.3;
+        }
+    </style>
+</head>
+<body class="flex flex-col items-center justify-center text-gray-200 font-sans p-4">
+    <main class="text-center max-w-4xl w-full">
+        <!-- Основной текст -->
+        <h1 class="text-3xl md:text-5xl font-light mb-12 tracking-wide opacity-90">
+            Я буду играть снова в игры через
+        </h1>
+        
+        <!-- Контейнер для таймера -->
+        <div id="countdown" class="flex justify-center items-center gap-2 md:gap-4 mb-16">
+            <!-- Блоки будут заполнены JavaScript -->
+        </div>
+    </main>
+    
+    <!-- Футер -->
+    <footer class="mt-auto py-6 text-gray-500 text-xs md:text-sm">
+        NML Studio © 2025
+    </footer>
 
+    <script>
+        // Целевая дата: 2 ноября 2025 года, 12:00
+        const targetDate = new Date('November 2, 2025 12:00:00').getTime();
+        
+        // Функция для обновления таймера
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+            
+            // Если время истекло
+            if (distance < 0) {
+                document.getElementById('countdown').innerHTML = 
+                    <div class="text-4xl md:text-6xl font-light">Время пришло</div>
+                ;
+                return;
+            }
+            
+            // Расчет дней, часов, минут, секунд
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            
+            // Форматирование чисел с ведущими нулями
+            const formatNumber = num => num < 10 ? 0${num} : num;
+            
+            // Создание HTML для таймера
+            const countdownHTML = 
+                <div class="timer-unit flex flex-col items-center">
+                    <span class="text-4xl md:text-7xl font-thin">${formatNumber(days)}</span>
+                    <span class="text-xs md:text-sm opacity-60 mt-2">дней</span>
+                </div>
+                <span class="timer-separator text-4xl md:text-7xl font-thin">:</span>
+                <div class="timer-unit flex flex-col items-center">
+                    <span class="text-4xl md:text-7xl font-thin">${formatNumber(hours)}</span>
+                    <span class="text-xs md:text-sm opacity-60 mt-2">часов</span>
+                </div>
+                <span class="timer-separator text-4xl md:text-7xl font-thin">:</span>
+                <div class="timer-unit flex flex-col items-center">
+                    <span class="text-4xl md:text-7xl font-thin">${formatNumber(minutes)}</span>
+                    <span class="text-xs md:text-sm opacity-60 mt-2">минут</span>
+                </div>
+                <span class="timer-separator text-4xl md:text-7xl font-thin">:</span>
+                <div class="timer-unit flex flex-col items-center">
+                    <span class="text-4xl md:text-7xl font-thin">${formatNumber(seconds)}</span>
+                    <span class="text-xs md:text-sm opacity-60 mt-2">секунд</span>
+                </div>
+            ;
+            
+            // Вставка HTML в страницу
+            document.getElementById('countdown').innerHTML = countdownHTML;
+        }
+        
+        // Первоначальный вызов и обновление каждую секунду
+        updateCountdown();
+        setInterval(updateCountdown, 1000);
+    </script>
+</body>
+</html>
