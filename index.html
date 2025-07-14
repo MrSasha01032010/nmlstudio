@@ -42,8 +42,12 @@
   <footer class="w-full text-center py-6 text-gray-500 text-xs md:text-sm">
     NML Studio © 2025
   </footer>
-
+  
+  <audio id="bg-music" src="music.mp3" autoplay loop></audio>
+  
   <script>
+    const audio = document.getElementById('bg-music');
+    audio.volume = 0.4; // 40% громкости
     const targetDate = new Date('November 02, 2025 21:30:00').getTime();
 
     function updateCountdown() {
