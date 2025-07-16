@@ -27,13 +27,11 @@
 </head>
 
 <body class="flex flex-col justify-center items-center text-gray-300 font-sans px-4">
-
-  <audio id="bg-music" src="music.mp3" autoplay loop></audio>
   
   <!-- Контент по центру -->
   <main class="flex flex-col justify-center items-center text-center min-h-screen">
     <!-- Заголовок -->
-    <h1 class="text-3xl md:text-5xl font-light mb-12 tracking-wide">
+    <h1 id="h1text" class="text-3xl md:text-5xl font-light mb-12 tracking-wide">
       Я буду играть снова в игры через
     </h1>
 
@@ -41,7 +39,7 @@
     <div id="countdown" class="flex flex-wrap justify-center items-center gap-3 md:gap-6"></div>
     
     <!-- Новый текст под таймером -->
-    <div class="mt-8 text-gray-400 text-sm md:text-base">
+    <div id="brosil" class="mt-8 text-gray-400 text-sm md:text-base">
       Бросил играть 13 июля 2025 года
     </div>
   </main>
@@ -52,20 +50,54 @@
   </footer>
   
   <script>
-    const audio = document.getElementById('bg-music');
-    audio.volume = 0.4; // 40% громкости
     const targetDate = new Date('November 02, 2025 21:30:00').getTime();
+    let countdownInterval;
 
     function updateCountdown() {
       const now = new Date().getTime();
       const distance = targetDate - now;
 
-      if (distance < 0) {
-        document.getElementById('countdown').innerHTML = `
-          <div class="text-4xl md:text-6xl font-light">Время пришло</div>
-        `;
+    if (distance < 0) {
+        const h1 = document.getElementById('h1text');
+        const brosil = document.getElementById('brosil');
+        const countdown = document.getElementById('countdown');
+
+        h1.style.transition = 'opacity 1s ease-in-out';
+        brosil.style.transition = 'opacity 1s ease-in-out';
+        countdown.style.transition = 'opacity 1s ease-in-out';
+
+        h1.style.opacity = '0';
+        brosil.style.opacity = '0';
+        countdown.style.opacity = '0';
+
+        clearInterval(countdownInterval);
+
+        setTimeout(() => {
+            countdown.style.opacity = '1';
+            countdown.innerHTML = `<div id="finish-text" class="text-4xl md:text-4xl font-light text-green-600 whitespace-pre-wrap"></div>`;
+
+            const message = "Время вышло. Можно играть если ты хочешь, но надо ли? Подумай несколько раз надо вот это все снова...\n\nТакже важный код тебе... Il IwR 2024 NmLoL\nЕсли ты все понял письмо тебя ждет на сайте студии...";
+            typeWriter(message, 100);
+        }, 3000);
+
         return;
-      }
+    }
+
+    function typeWriter(text, speed) {
+        const finishText = document.getElementById('finish-text');
+        let i = 0;
+
+        function typing() {
+            if (i < text.length) {
+            finishText.innerHTML += text.charAt(i);
+            i++;
+            setTimeout(typing, speed);
+            }
+        }
+
+        typing();
+    }
+
 
       const days = Math.floor(distance / (1000 * 60 * 60 * 24));
       const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
@@ -100,7 +132,7 @@
     }
 
     updateCountdown();
-    setInterval(updateCountdown, 1000);
+    countdownInterval = setInterval(updateCountdown, 1000);
   </script>
 </body>
 </html>
